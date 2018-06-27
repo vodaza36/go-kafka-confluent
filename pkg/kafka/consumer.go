@@ -22,8 +22,8 @@ func NewConsumer(bootstrapServers string, groupID string, topic string) *Consume
 	}
 }
 
-// Process incoming messages
-func (p *Consumer) Process(handler func(msg []byte)) error {
+// Listen to incoming messages
+func (p *Consumer) Listen(handler func(msg []byte)) error {
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers": p.BootstrapServers,
 		"group.id":          p.GroupID,
