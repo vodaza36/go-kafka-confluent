@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	c := kafka.NewConsumer("localhost", "myGroup", "myTopic", myConsumerHandler)
-	err := c.Process()
+	c := kafka.NewConsumer("localhost", "myGroup", "myTopic")
+	err := c.Process(myConsumerHandler)
 
 	if err != nil {
 		log.Fatalf("Error creating consumer: %v", err)

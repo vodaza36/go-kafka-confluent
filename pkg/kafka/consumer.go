@@ -11,21 +11,19 @@ type Consumer struct {
 	BootstrapServers string
 	GroupID          string
 	Topic            string
-	MessageHandler   func(msg []byte)
 }
 
 // NewConsumer constructor
-func NewConsumer(bootstrapServers string, groupID string, topic string, handler func(msg []byte)) *Consumer {
+func NewConsumer(bootstrapServers string, groupID string, topic string) *Consumer {
 	return &Consumer{
 		BootstrapServers: bootstrapServers,
 		GroupID:          groupID,
 		Topic:            topic,
-		MessageHandler:   handler,
 	}
 }
 
 // Process incoming messages
-func (p *Consumer) Process() error {
+func (p *Consumer) Process(handler func(msg []byte)) error {
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers": p.BootstrapServers,
 		"group.id":          p.GroupID,
@@ -54,7 +52,6 @@ func (p *Consumer) Process() error {
 			return err
 		}
 
-		log.Printf("Message on %s: %s\n", msg.TopicPartition, string(msg.Value))
-		p.MessageHandler(msg.Value)
+		handler(msg.Value)
 	}
 }
